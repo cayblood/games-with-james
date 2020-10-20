@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Chat</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="" />
+    <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+  </head>
+  <body>
+    <h1>Chat app</h1>
+
+    <form id="remote-peer-form">
+      <input id="remote-peer-id" type="text" />
+    </form>
+
+    <!-- <p>Type chat message below</p>
+    <textarea name="message" cols="40" rows="10">
+    </textarea> -->
+    <script type="text/javascript">
+      document.addEventListener("DOMContentLoaded", () => {
+        const remotePeerForm = document.getElementById('remote-peer-form');
+        const peer = new Peer();
+        let peerId;
+        
+        remotePeerForm.onsubmit = (event) => {
+          event.preventDefault();
+          console.log('sdglksndglsdkng');
+
+          const remoteId = document.getElementById('remote-peer-id').value;
+          console.log('Trying to connect to remote ID ', remoteId);
+          const conn = peer.connect(remoteId);
+          
+          conn.on('open', () => {
+            conn.on('data', (data) => {
+              console.log('Received2', data);
+            });
+            conn.send('Hello!');
+          });
+
+          return false;
+        };
+        
+        peer.on('open', (id) => {
+          console.log('My peer ID is: ' + id);
+          peerId = id;
+        });
+
+        peer.on('connection', (conn) => {
+          conn.on('data', (data) => {
+            console.log('Received1', data);
+            conn.send('Hello back!');
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
